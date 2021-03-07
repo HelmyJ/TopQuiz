@@ -1,4 +1,4 @@
-package com.topquiz;
+package com.topquiz.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,11 +11,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.topquiz.R;
+import com.topquiz.model.User;
+
 public class MainActivity extends AppCompatActivity {
 
     private TextView mGreetingText;
     private EditText mNameInput;
     private Button mPlayButton;
+    private User mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         mGreetingText = findViewById(R.id.activity_main_greeting_txt);
         mNameInput = findViewById(R.id.activity_main_name_input);
         mPlayButton = findViewById(R.id.activity_main_play_btn);
+        mUser = new User();
 
         mPlayButton.setEnabled(false);
 
@@ -48,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String firstName = mNameInput.getText().toString();
+                mUser.setFirstName(firstName);
                 Intent gameActivityIntent = new Intent(MainActivity.this, GameActivity.class);
                 startActivity(gameActivityIntent);
             }
