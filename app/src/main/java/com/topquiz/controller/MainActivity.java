@@ -12,7 +12,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.topquiz.R;
+import com.topquiz.model.BankQuestion;
+import com.topquiz.model.Question;
 import com.topquiz.model.User;
+
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText mNameInput;
     private Button mPlayButton;
     private User mUser;
+    private BankQuestion mBankQuestion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +35,30 @@ public class MainActivity extends AppCompatActivity {
         mNameInput = findViewById(R.id.activity_main_name_input);
         mPlayButton = findViewById(R.id.activity_main_play_btn);
         mUser = new User();
+
+        //Create questions
+        Question question1 = new Question("Who is the creator of Android?",
+                Arrays.asList("Andy Rubin",
+                        "Steve Wozniak",
+                        "Jake Wharton",
+                        "Paul Smith"),
+                0);
+
+        Question question2 = new Question("When did the first man land on the moon?",
+                Arrays.asList("1958",
+                        "1962",
+                        "1967",
+                        "1969"),
+                3);
+
+        Question question3 = new Question("What is the house number of The Simpsons?",
+                Arrays.asList("42",
+                        "101",
+                        "666",
+                        "742"),
+                3);
+
+        mBankQuestion = new BankQuestion(Arrays.asList(question1, question2, question3));
 
         mPlayButton.setEnabled(false);
 
