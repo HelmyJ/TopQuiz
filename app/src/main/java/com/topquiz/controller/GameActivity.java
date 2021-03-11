@@ -1,9 +1,14 @@
 package com.topquiz.controller;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.topquiz.R;
 import com.topquiz.model.BankQuestion;
@@ -11,7 +16,7 @@ import com.topquiz.model.Question;
 
 import java.util.Arrays;
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView mQuestionText;
     private Button mAnswer1Btn;
@@ -20,6 +25,8 @@ public class GameActivity extends AppCompatActivity {
     private Button mAnswer4Btn;
     private Question mCurrentQuestion;
     private BankQuestion mBankQuestion;
+    private int mScore;
+    private int mNumberOfQuestions;
 
 
     @Override
@@ -35,6 +42,11 @@ public class GameActivity extends AppCompatActivity {
         mAnswer3Btn = findViewById(R.id.activity_game_answer3);
         mAnswer4Btn = findViewById(R.id.activity_game_answer4);
 
+        mAnswer1Btn.setOnClickListener(this);
+        mAnswer2Btn.setOnClickListener(this);
+        mAnswer3Btn.setOnClickListener(this);
+        mAnswer4Btn.setOnClickListener(this);
+
         //Use tag property to 'name' buttons
         mAnswer1Btn.setTag(0);
         mAnswer2Btn.setTag(1);
@@ -42,6 +54,11 @@ public class GameActivity extends AppCompatActivity {
         mAnswer4Btn.setTag(3);
 
         mCurrentQuestion = mBankQuestion.getQuestion();
+
+        mScore = 0;
+        mNumberOfQuestions = 2;
+
+
 
         this.displayQuestion(mCurrentQuestion);
     }
@@ -80,4 +97,37 @@ public class GameActivity extends AppCompatActivity {
         return new BankQuestion(Arrays.asList(question1, question2, question3));
     }
 
+    @Override
+    public void onClick(View v) {
+        int responseIndex = (int) v.getTag();
+        if (responseIndex == mCurrentQuestion.getAnswerIndex()){
+            Toast.makeText(this, "Correct", Toast.LENGTH_SHORT).show();
+            mScore++;
+        } else {
+            Toast.makeText(this, "Wrong answer!", Toast.LENGTH_SHORT).show();
+        }
+
+        if (mNumberOfQuestions == 0){
+            endGame();
+        } else {
+            mNumberOfQuestions--;
+            mCurrentQuestion = mBankQuestion.getQuestion();
+            displayQuestion(mCurrentQuestion);
+        }
+    }
+
+    private void endGame(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Well done!")
+                .setMessage("Your score is "+ mScore)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .create()
+                .show();
+    }
 }
